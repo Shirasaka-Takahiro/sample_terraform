@@ -1,6 +1,6 @@
 ##VPC
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc
+  cidr_block           = "${var.vpc}"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -11,10 +11,10 @@ resource "aws_vpc" "vpc" {
 
 ##Public Subnets
 resource "aws_subnet" "public-subnets" {
-  count                   = length(var.public_subnets)
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = element(var.public_subnets, count.index)
-  availability_zone       = element(var.availability_zones, count.index)
+  count                   = "${length(var.public_subnets)}"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "${element(var.public_subnets, count.index)}"
+  availability_zone       = "${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = true
 
   tags = {
@@ -25,10 +25,10 @@ resource "aws_subnet" "public-subnets" {
 
 ##Private Subnets
 resource "aws_subnet" "private-subnets" {
-  count             = length(var.private_subnets)
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = element(var.private_subnets, count.index)
-  availability_zone = element(var.availability_zones, count.index)
+  count             = "${length(var.private_subnets)}"
+  vpc_id            = "${ws_vpc.vpc.id}"
+  cidr_block        = "${element(var.private_subnets, count.index)}"
+  availability_zone = "${element(var.availability_zones, count.index)}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-${substr(element(var.availability_zones, count.index), -2, 2)}"
@@ -38,7 +38,7 @@ resource "aws_subnet" "private-subnets" {
 
 ##Internet Gateway
 resource "aws_internet_gateway" "internet-gateway" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = "${aws_vpc.vpc.id}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-igw"
@@ -47,7 +47,7 @@ resource "aws_internet_gateway" "internet-gateway" {
 
 ##Public Route Table
 resource "aws_route_table" "public-route-table" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = "${aws_vpc.vpc.id}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-public-rtb"
@@ -57,21 +57,21 @@ resource "aws_route_table" "public-route-table" {
 
 ##Public Internet Gateway
 resource "aws_route" "public-internet-gateway" {
-  gateway_id             = aws_internet_gateway.internet-gateway.id
-  route_table_id         = aws_route_table.public-route-table.id
+  gateway_id             = "${aws_internet_gateway.internet-gateway.id}"
+  route_table_id         = "${aws_route_table.public-route-table.id}"
   destination_cidr_block = "0.0.0.0/0"
 }
 
 ##Public Routes Association
 resource "aws_route_table_association" "public-routes-association" {
-  count          = length(var.public_subnets)
-  subnet_id      = element(aws_subnet.public-subnets.*.id, count.index)
-  route_table_id = aws_route_table.public-route-table.id
+  count          = "${length(var.public_subnets)}"
+  subnet_id      = "${element(aws_subnet.public-subnets.*.id, count.index)}"
+  route_table_id = "${aws_route_table.public-route-table.id}"
 }
 
 ##Private Route Table
 resource "aws_route_table" "private-route-table" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = "${aws_vpc.vpc.id}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-rtb"
@@ -81,7 +81,7 @@ resource "aws_route_table" "private-route-table" {
 
 ##Private Routes Association
 resource "aws_route_table_association" "private-route-table-association" {
-  count       = length(var.private_subnets)
-  subnet_id   = element(aws_subnet.private-subnets.*.id, count.index)
-  route_table = aws_route_table.private-route-table.id
+  count       = "${length(var.private_subnets)}"
+  subnet_id   = "${element(aws_subnet.private-subnets.*.id, count.index)}"
+  route_table = "${aws_route_table.private-route-table.id}"
 }
