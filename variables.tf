@@ -29,17 +29,17 @@ variable "private_subnets" {
 ##EC2
 variable "ami" {
   description = "ID of AMI to use for ec2 instance"
-  default = "ami-0bba69335379e17f8"
+  default     = "ami-0bba69335379e17f8"
 }
 
 variable "instance_type" {
   description = "The type of instance"
-  type = string
-  default = "t3.micro"
+  type        = string
+  default     = "t3.micro"
 }
 
 variable "key_name" {
   description = "key name of the key pair"
-  type = string
-  default = "example"
+  type        = string
+  default     = "example"
 }

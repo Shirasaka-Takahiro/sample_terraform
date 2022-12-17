@@ -3,8 +3,9 @@ resource "aws_lb" "alb" {
   name               = "${var.general_config["project"]}-${var.general_config["environment"]}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = "${aws_security_group.alb.id}"
-  subnets            = [aws_subnet.examplepublic1a.id, aws_subnet.examplepublic1c.id]
+  security_groups    = aws_security_group.alb.id
+  count              = length(var.availability_zones)
+  subnets            = element(var.availability_zones, count.index)
   ip_address_type    = "ipv4"
 
   tags = {
@@ -51,6 +52,6 @@ resource "aws_lb_listener" "alb-listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.example.arn
+    target_group_arn = aws_lb_target_group.gt.arn
   }
 }
