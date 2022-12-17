@@ -23,3 +23,8 @@ variable "public_subnets" {
 variable "private_subnets" {
   default = ["10.0.20.0/24", "10.0.40.0/24"]
 }
+
+variable "ami" {
+  description = "ID of AMI to use for ec2 instance"
+  default = "ami-0bba69335379e17f8"
+}
