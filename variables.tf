@@ -1,3 +1,4 @@
+##General Config
 variable "general_config" {
   description = "Project and Environment name"
   default = {
@@ -6,6 +7,7 @@ variable "general_config" {
   }
 }
 
+##Network
 variable "vpc" {
   description = "CIDR BLOCK for VPC"
   type        = string
@@ -24,7 +26,20 @@ variable "private_subnets" {
   default = ["10.0.20.0/24", "10.0.40.0/24"]
 }
 
+##EC2
 variable "ami" {
   description = "ID of AMI to use for ec2 instance"
   default = "ami-0bba69335379e17f8"
+}
+
+variable "instance_type" {
+  description = "The type of instance"
+  type = string
+  default = "t3.micro"
+}
+
+variable "key_name" {
+  description = "key name of the key pair"
+  type = string
+  default = "example"
 }

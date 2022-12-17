@@ -1,9 +1,9 @@
 ##ALB
-resource "aws_lb" "example" {
+resource "aws_lb" "alb" {
   name               = "example"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = aws_security_group.examplealb.id
+  security_groups    = "${aws_security_group.alb.id}"
   subnets            = [aws_subnet.examplepublic1a.id, aws_subnet.examplepublic1c.id]
   ip_address_type    = "ipv4"
 
