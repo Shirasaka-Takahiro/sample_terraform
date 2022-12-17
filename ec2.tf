@@ -37,10 +37,10 @@ data "aws_ami" "iam-image" {
 
 ##EC2
 resource "aws_instance" "example" {
-  ami                    = "${data.aws_ami.ima-image.image_id}"
-  vpc_security_group_ids = "${ws_security_group.examplehttp.id}"
-  subnet_id              = "${aws_subnet.examplepublic1a.id}"
-  key_name               = "${aws_key_pair.example.id}"
+  ami                    = data.aws_ami.ima-image.image_id
+  vpc_security_group_ids = ws_security_group.examplehttp.id
+  subnet_id              = aws_subnet.examplepublic1a.id
+  key_name               = aws_key_pair.example.id
   instance_type          = "t2.micro"
 
   tags = {
@@ -51,7 +51,7 @@ resource "aws_instance" "example" {
 
 ##Elastic IP
 resource "aws_eip" "example" {
-  instance = "${aws_instance.example.id}"
+  instance = aws_instance.example.id
   vpc      = true
 }
 
