@@ -3,9 +3,9 @@ resource "aws_lb" "alb" {
   name               = "${var.general_config["project"]}-${var.general_config["environment"]}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = aws_security_group.alb.id
+  security_groups    = [aws_security_group.alb.id]
   count              = length(var.availability_zones)
-  subnets            = element(var.availability_zones, count.index)
+  subnets            = [element(var.availability_zones, count.index)]
   ip_address_type    = "ipv4"
 
   tags = {
